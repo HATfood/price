@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>داشبورد قیمت‌گذاری محصولات قهوه</title>
+
+<!-- Vazirmatn Font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* --- IMPROVED UI/UX & COLOR PALETTE --- */
+  :root {
+    --bg: #f9fafb; /* Light gray background */
+    --panel-bg: #ffffff; /* White panels */
+    --border-color: #e5e7eb; /* Light gray border */
+    --text-primary: #111827; /* Dark text for high contrast */
+    --text-secondary: #6b7280; /* Muted gray for hints/secondary info */
+    
+    --accent: #0ea5e9; /* A professional blue for highlights */
+    --accent-light: #f0f9ff; /* Light blue for note backgrounds */
+    --good: #16a34a; /* Green for positive correlation */
+    --warn: #f59e0b; /* Amber/Yellow for mid-range */
+    --bad: #ef4444; /* Red for negative correlation / premium */
+  }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text-primary);
+    /* --- VAZIR FONT INTEGRATED --- */
+    font-family: 'Vazirmatn', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    line-height: 1.7;
+  }
+
+  .wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  h1 { font-size: 30px; font-weight: 700; margin: 0 0 16px; color: var(--text-primary); }
+  h2 { font-size: 22px; margin: 24px 0 16px; font-weight: 600; }
+  h3 { font-size: 18px; margin: 24px 0 12px; font-weight: 600; }
+  p { color: var(--text-secondary); margin: 0.5em 0; }
+
+  .grid { display: grid; gap: 20px; }
+  .g-2 { grid-template-columns: repeat(2, 1fr); }
+  .g-3 { grid-template-columns: repeat(3, 1fr); }
+
+  .panel {
+    background: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    margin-top: 24px;
+  }
+
+  .kpi { background: #fff; border: 1px solid var(--border-color); padding: 20px; border-radius: 12px; }
+  .kpi .v { font-size: 24px; font-weight: 700; color: var(--text-primary); }
+
+  .row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+  .pill {
+    padding: 8px 16px; border-radius: 999px; background: var(--panel-bg); border: 1px solid var(--border-color);
+    color: var(--text-secondary); font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s ease-in-out;
+  }
+  .pill:hover { border-color: var(--accent); color: var(--accent); }
+  .pill.active { background: var(--accent); border-color: var(--accent); color: #ffffff; box-shadow: 0 4px 10px -2px rgb(14 165 233 / 0.4); }
+
+  .hint { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+  .table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+  .table th, .table td { border-bottom: 1px solid var(--border-color); padding: 12px 16px; text-align: center; vertical-align: middle; }
+  .table th { color: var(--text-secondary); font-weight: 600; background-color: var(--bg); font-size: 14px; }
+  .table tbody tr:nth-child(even) { background-color: var(--bg); }
+  
+  .spark { height: 80px; width: 100%; }
+  .spark-bg { fill: var(--bg); stroke: var(--border-color); }
+  .spark-label { font-size: 10px; fill: var(--text-secondary); font-family: 'Vazirmatn'; }
+
+  .flex { display: flex; align-items: center; gap: 10px; }
+  
+  .note {
+    border-right: 4px solid var(--accent); border-left: none; padding: 12px 16px; margin: 16px 0;
+    background: var(--accent-light); border-radius: 8px; color: var(--text-primary); font-size: 14px;
+  }
+
+  /* --- NEW: IMPROVED BRAND LIST DISPLAY --- */
+  .brand-list-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+  }
+  .brand-list-container h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0 0 10px;
+      color: var(--text-primary);
+  }
+  .brand-list-container ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+  }
+  .brand-list-container li {
+      font-size: 13px;
+      color: var(--text-secondary);
+      padding: 4px 0;
+      border-bottom: 1px dashed #f3f4f6;
+  }
+  .brand-list-container li:last-child {
+      border-bottom: none;
+  }
+
+  .footer { text-align: center; margin-top: 40px; color: var(--text-secondary); font-size: 13px; }
+
+  @media (max-width: 940px) {
+    .g-3, .brand-list-container { grid-template-columns: 1fr; }
+    .g-2 { grid-template-columns: 1fr; }
+    .kpis { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .kpis { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>داشبورد قیمت‌گذاری محصولات قهوه</h1>
+  
+  <div class="panel">
+    <h2 style="margin-top:0;">روش‌شناسی (چگونه به نتایج رسیدیم)</h2>
+    <div class="grid g-3">
+      <div class="kpi">
+        <div class="v" style="font-size: 18px;">معیار اصلی: قیمت/گرم</div>
+        <p class="hint">برای حذف اثر تفاوت وزن/تعداد ساشه، همه مقایسه‌ها بر پایه <b>قیمت هر گرم</b> و <b>قیمت هر ساشه</b> انجام شده است.</p>
+      </div>
+      <div class="kpi">
+        <div class="v" style="font-size: 18px;">لنگر ذهنی</div>
+        <p class="hint">برای فهم ادراک مشتری، قیمت معادل <b>۲۰ گرم</b> محاسبه شد تا «نقطه مرجع» خرید مشخص گردد.</p>
+      </div>
+      <div class="kpi">
+        <div class="v" style="font-size: 18px;">کوانتیل‌ها → پنجره قیمت</div>
+        <p class="hint">براساس چارک‌های بازار (Q1/Median/Q3) پنجره‌های <b>Value / Mid / Premium</b> استخراج شد.</p>
+      </div>
+      <div class="kpi">
+        <div class="v" style="font-size: 18px;">همبستگی‌ها</div>
+        <p class="hint">روابط کلیدی بین وزن ساشه/وزن کل و قیمت (بسته/گرم) تحلیل شد تا اهرم‌های واقعی قیمت‌گذاری مشخص شوند.</p>
+      </div>
+      <div class="kpi">
+        <div class="v" style="font-size: 18px;">الگوی کانال افق</div>
+        <p class="hint">میانگین فاصله قیمت روی بسته تا قیمت «افق کوروش» برای برآورد بودجه تخفیف بررسی شد.</p>
+      </div>
+      <div class="kpi">
+        <div class="v" style="font-size: 18px;">پیشنهاد MSRP</div>
+        <p class="hint">قیمت‌های پیشنهادی محصولات شرکت با نگاشت قیمت/گرم به وزن واقعی هر SKU محاسبه شد.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="panel">
+    <h2 style="margin-top:0;">انتخاب دسته محصول</h2>
+    <div class="row" id="catPills"></div>
+    <p class="hint">یک دسته را انتخاب کنید تا شاخص‌ها، نمودارها و پیشنهاد قیمت مرتبط نمایش داده شود.</p>
+  </div>
+
+  <!-- Category Summary will be injected here -->
+  <div class="grid g-3" id="cards"></div>
+
+  <!-- Windows & Brands will be injected here -->
+  <div class="panel" id="windows"></div>
+
+  <!-- Our Products Pricing will be injected here -->
+  <div class="panel" id="our"></div>
+
+  <div class="footer">© داشبورد داخلی قیمت‌گذاری — نسخه نمایشی. اعداد بر اساس تحلیل فایل آپلودشده شما خلاصه‌سازی شده‌اند.</div>
+</div>
+
+<script>
+// ======= Data (خلاصه‌شده بر مبنای تحلیل شما) =======
+const DATA = {
+  categories:[
+    {
+      key:"3in1", name:"۳ در ۱", 
+      anchor20g: 14.4, // هزار تومان
+      meanPerGram: 736, // تومان
+      corr:{ pack_vs_total:+0.95, pergram_vs_sachet:-0.03 },
+      windows:{ value:679, mid:720, premium:816 }, // تومان/گرم (Q1/Median/Q3)
+      ofogh:{ avg:-0.107, min:-0.271, max:+0.012 },
+      notes:[
+        "بازار پررقابت؛ وزن کل تعیین‌کننده اصلی قیمت بسته است.",
+        "وزن ساشه اثر اندکی بر قیمت/گرم دارد (تقریباً بی‌اثر)."
+      ],
+      sampleBrands:{
+        value:["Mahmod (18g×24=432g → 240k)","Bon Mano (18g×24=432g → 248k)","Sokafe (21g×20=420g → 260k)","Nescafe (20g×20=400g → 257k)","Copa (18g×10=180g → 122k)","Tims (18g×24=432g → 295k)"],
+        mid:["Tims (18g×20=360g → 246k)","Classmate (18g×24=432g → 308k)","Nescafe (20g×24=480g → 345k)","Multicafe (18g×24=432g → 312k)","Venz Cafe (20g×24=480g → 350k)","Altunsa* (18g×48=864g → 643k)"],
+        premium:["Fabios* (18g×20=360g → 290k)","Multicafe (18g×12=216g → 177k)","Klassno (18g×20=360g → 298k)","Bockeshtein (18g×30=540g → 460k)","Copa (18g×40=720g → 636k)","AF (20g×10=200g → 200k)"]
+      }
+    },
+    {
+      key:"2in1", name:"۲ در ۱",
+      anchor20g: 21.9,
+      meanPerGram: 1146,
+      corr:{ pack_vs_total:+0.68, pergram_vs_sachet:-0.64 },
+      windows:{ value:1039, mid:1093, premium:1400 },
+      ofogh:{ avg:-0.129, min:-0.255, max:-0.011 },
+      notes:[
+        "بالاترین ارزش برحسب وزن؛ تمایل مشتری به پرداخت بیشتر.",
+        "ساشه سنگین‌تر ⇒ قیمت/گرم کمتر و ارزش ادراکی بیشتر."
+      ],
+      sampleBrands:{
+        value:["Madlin* (14g×20=280g → 185k)","Bockeshtein (20g×20=400g → 285k)","Classmate (14g×20=280g → 252k)","Bon Mano (16g×24=384g → 350k)","Elgado (10g×20=212g → 220k)","Copa (12g×40=480g → 500k)"],
+        mid:["Copa (12g×20=240g → 258k)","Tims (12g×24=288g → 320k)","Tims (12g×20=240g → 277k)","Multicafe (14g×12=168g → 195k)"],
+        premium:["Sokafe (10g×20=212g → 265k)","Klassno (12g×20=240g → 348k)","Nescafe (10g×24=254g → 370k)","Nescafe (10g×20=212g → 310k)","Altunsa* (10g×24=240g → 358k)","AF (12g×10=120g → 200k)"]
+      }
+    },
+    {
+      key:"capp", name:"کاپوچینو",
+      anchor20g: 15.6,
+      meanPerGram: 808,
+      corr:{ pack_vs_total:+0.67, pergram_vs_sachet:-0.51 },
+      windows:{ value:709, mid:780, premium:930 },
+      ofogh:{ avg:-0.0754, min:-0.2013, max:0.0 },
+      notes:[
+        "بازار پایدار با پراکندگی کم؛ ماندن در بازه متعارف مهم است.",
+        "افق کوروش گاهی پروموشن‌های عمیق دارد (ریسک بودجه تخفیف)."
+      ],
+      sampleBrands:{
+        value:["Good Day (25g×30=750g → 450k)","Sokafe (22g×20=450g → 300k)","Bon Mano (25g×24=600g → 419k)","Venz Cafe (25g×20=500g → 360k)"],
+        mid:["Mahmod (25g×20=500g → 370k)","Tims (25g×20=500g → 390k)","Multicafe (25g×20=500g → 420k)"],
+        premium:["Classmate (20g×24=480g → 434k)","Klassno (25g×20=500g → 478k)","Nescafe (19g×20=386g → 380k)","Bockeshtein (23g×12=276g → 275k)"]
+      }
+    },
+    {
+      key:"hot", name:"هات‌چاکلت",
+      anchor20g: 14.3,
+      meanPerGram: 746,
+      corr:{ pack_vs_total:+0.73, pergram_vs_sachet:-0.59 },
+      windows:{ value:550, mid:717, premium:906 },
+      ofogh:{ avg:null, min:null, max:null },
+      notes:[
+        "بازار دو قطبی؛ امکان ساخت پیشنهاد اقتصادیِ بزرگ‌سایز.",
+        "ساشه سنگین‌تر ⇒ قیمت/گرم کمتر."
+      ],
+      sampleBrands:{
+        value:["Sokafe (25g×20=500g → 240k)","Multicoco (27g×24=648g → 336k)","Bockeshtein (25g×12=300g → 160k)","Elgado (30g×20=600g → 340k)"],
+        mid:["Bon Mano (20g×24=480g → 317k)","Choco Latto (30g×20=600g → 430k)","Mahmod (20g×20=400g → 326k)"],
+        premium:["Tims (30g×20=600g → 490k)","Klassno (20g×20=400g → 398k)","Classmate (20g×10=200g → 210k)","Copa (18g×40=720g → 756k)"]
+      }
+    }
+  ],
+  ourProducts:[
+    {cat:"3in1", name:"۳ در ۱ • جعبه ۶تایی (۹۶g)", weight:96},
+    {cat:"3in1", name:"۳ در ۱ • بسته ۲۰تایی (۳۲۰g)", weight:320},
+    {cat:"2in1", name:"۲ در ۱ • جعبه ۶تایی (۶۰g)", weight:60},
+    {cat:"2in1", name:"۲ در ۱ • بسته ۲۰تایی (۲۰۰g)", weight:200},
+    {cat:"capp", name:"کاپوچینو • بسته ۱۴تایی (۲۸۰g)", weight:280},
+    {cat:"hot", name:"هات‌چاکلت • بسته ۱۴تایی (۲۸۰g)", weight:280}
+  ]
+};
+
+const fmt = n => n == null ? "–" : n.toLocaleString("fa-IR", { maximumFractionDigits: 1 });
+const pct = n => n == null ? "–" : (n * 100).toLocaleString("fa-IR", { maximumFractionDigits: 1 }) + "٪";
+
+const pillsContainer = document.getElementById('catPills');
+DATA.categories.forEach((c, i) => {
+  const el = document.createElement('button');
+  el.className = 'pill' + (i === 0 ? ' active' : '');
+  el.textContent = c.name;
+  el.dataset.key = c.key;
+  pillsContainer.appendChild(el);
+});
+
+let currentKey = DATA.categories[0].key;
+
+function render() {
+  const cat = DATA.categories.find(x => x.key === currentKey);
+  const cards = document.getElementById('cards');
+  cards.innerHTML = '';
+  cards.style.marginTop = '24px';
+
+  cards.appendChild(createCard("لنگر ذهنی قیمت (۲۰ گرم)", `${fmt(cat.anchor20g)} هزار تومان`, `ادراک مرجع مشتری برای هر ۲۰ گرم در این دسته.`));
+  cards.appendChild(createCard("میانگین قیمت هر گرم", `${fmt(cat.meanPerGram)} تومان`, `میانگین بازار؛ مبنای مقایسه وزن‌ها و تعدادهای مختلف.`));
+  cards.appendChild(createCard("همبستگی‌ها", "نمای ساده", `قیمت بسته ↔ وزن کل: <b>${fmt(cat.corr.pack_vs_total)}</b><br/>قیمت/گرم ↔ وزن ساشه: <b>${fmt(cat.corr.pergram_vs_sachet)}</b>`, drawCorrelationChart(cat.corr)));
+
+  const windowsPanel = document.getElementById('windows');
+  windowsPanel.innerHTML = `
+    <h2>پنجره‌های قیمت‌گذاری (قیمت هر گرم)</h2>
+    <div class="row">
+      ${createWindowBox('Value', cat.windows.value, 'var(--accent)')}
+      ${createWindowBox('Mid', cat.windows.mid, 'var(--warn)')}
+      ${createWindowBox('Premium', cat.windows.premium, 'var(--bad)')}
+    </div>
+    <p class="note">بر مبنای چارک‌های بازار: Q1 (Value)، میانه (Mid) و Q3 (Premium).</p>
+    
+    <h3>برندهای نمونه در هر پنجره</h3>
+    ${formatBrands(cat.sampleBrands)}
+
+    <h2>الگوی کانال افق</h2>
+    ${createOfoghBox(cat.ofogh)}
+  `;
+
+  const ourProductsPanel = document.getElementById('our');
+  const ourProductsInCategory = DATA.ourProducts.filter(p => p.cat === currentKey);
+  let tableRows = ourProductsInCategory.map(p => {
+    const valuePrice = Math.round(p.weight * cat.windows.value / 1000);
+    const midPrice = Math.round(p.weight * cat.windows.mid / 1000);
+    const premiumPrice = Math.round(p.weight * cat.windows.premium / 1000);
+    return `<tr><td>${p.name}</td><td>${fmt(p.weight)}</td><td>${fmt(valuePrice)}</td><td>${fmt(midPrice)}</td><td>${fmt(premiumPrice)}</td></tr>`;
+  }).join('');
+  
+  if (!tableRows) {
+    tableRows = `<tr><td colspan="5" style="padding: 20px;">برای این دسته محصولی در سبد تعریف نشده است.</td></tr>`;
+  }
+
+  ourProductsPanel.innerHTML = `
+    <h2>پیشنهاد قیمت‌گذاری محصولات شرکت (MSRP، هزار تومان)</h2>
+    <table class="table">
+      <thead><tr><th>محصول</th><th>وزن (g)</th><th>Value</th><th>Mid</th><th>Premium</th></tr></thead>
+      <tbody>${tableRows}</tbody>
+    </table>
+    <p class="note">توصیه مدیریتی: در ${cat.name}، سطوح قیمتی پیشنهادی با توجه به جایگاه رقابتی، بودجه پروموشن کانال و اهداف سودآوری تنظیم شود.</p>`;
+}
+
+function createCard(title, value, desc, extraContent = '') {
+  const el = document.createElement('div');
+  el.className = 'panel';
+  el.innerHTML = `<div class="flex" style="justify-content:space-between; align-items: flex-start;">
+    <div>
+      <div style="font-weight:600; font-size:18px; color: var(--text-primary);">${title}</div>
+      <div class="v" style="margin-top:8px;">${value}</div>
+      <p class="hint" style="margin:8px 0 0; max-width: 250px;">${desc}</p>
+    </div>
+    ${extraContent ? `<div>${extraContent}</div>` : ''}
+  </div>`;
+  return el;
+}
+
+function drawCorrelationChart(corr) {
+  const scale = x => 80 * (x + 1) / 2;
+  const a_pos = scale(corr.pack_vs_total);
+  const b_pos = scale(corr.pergram_vs_sachet);
+  const a_color = corr.pack_vs_total > 0 ? 'var(--good)' : 'var(--bad)';
+  const b_color = corr.pergram_vs_sachet > 0 ? 'var(--good)' : 'var(--bad)';
+
+  return `<svg class="spark" viewBox="0 0 140 80">
+    <rect class="spark-bg" x="10" y="10" width="120" height="22" rx="6" />
+    <rect class="spark-bg" x="10" y="48" width="120" height="22" rx="6" />
+    <circle cx="${10 + a_pos}" cy="21" r="8" fill="${a_color}" />
+    <circle cx="${10 + b_pos}" cy="59" r="8" fill="${b_color}" />
+    <text class="spark-label" x="130" y="25" text-anchor="end">قیمت بسته ↔ وزن کل</text>
+    <text class="spark-label" x="130" y="63" text-anchor="end">قیمت/گرم ↔ وزن ساشه</text>
+  </svg>`;
+}
+
+function createWindowBox(label, value, color) {
+  return `<div class="kpi" style="flex:1; min-width:180px;">
+    <div class="v" style="color:${color};">${fmt(value)} <span class="hint" style="font-size:16px;">تومان/گرم</span></div>
+    <div class="hint" style="font-weight:600;">${label}</div>
+  </div>`;
+}
+
+// --- NEW HELPER FUNCTION FOR BRAND LISTS ---
+function formatBrands(brands) {
+    const valueItems = brands.value.map(b => `<li>${b}</li>`).join('');
+    const midItems = brands.mid.map(b => `<li>${b}</li>`).join('');
+    const premiumItems = brands.premium.map(b => `<li>${b}</li>`).join('');
+
+    return `<div class="brand-list-container">
+        <div>
+            <h4>Value</h4>
+            <ul>${valueItems}</ul>
+        </div>
+        <div>
+            <h4>Mid</h4>
+            <ul>${midItems}</ul>
+        </div>
+        <div>
+            <h4>Premium</h4>
+            <ul>${premiumItems}</ul>
+        </div>
+    </div>`;
+}
+
+function createOfoghBox(ofogh) {
+  if (ofogh.avg == null) return `<p class="hint">داده کافی از قیمت افق برای این دسته در دسترس نیست.</p>`;
+  return `<div class="grid g-3">
+    <div class="kpi"><div class="v">${pct(ofogh.avg)}</div><div class="hint">میانگین فاصله قیمت افق با قیمت روی بسته</div></div>
+    <div class="kpi"><div class="v">${pct(ofogh.min)}</div><div class="hint">عمیق‌ترین پروموشن مشاهده‌شده</div></div>
+    <div class="kpi"><div class="v">${pct(ofogh.max)}</div><div class="hint">موارد نادر افزایش قیمت/هم‌قیمت</div></div>
+  </div>`;
+}
+
+pillsContainer.addEventListener('click', e => {
+  if (e.target.matches('.pill')) {
+    document.querySelectorAll('.pill').forEach(x => x.classList.remove('active'));
+    e.target.classList.add('active');
+    currentKey = e.target.dataset.key;
+    render();
+  }
+});
+
+render();
+</script>
+</body>
+</html>
